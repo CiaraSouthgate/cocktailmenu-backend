@@ -12,14 +12,21 @@ const getAllSubcategories = () => {
   return db.execute('SELECT * FROM subcategory')
 }
 
-const getIngredientsInCategory = (categoryId) => {}
+const getSubcategoriesForCategory = categoryId => {
+  return db.execute(`SELECT * FROM 'subcategory' WHERE categoryId = ?`, [categoryId])
+}
 
-const createCategory = (name) => {
+const getIngredientsInCategory = categoryId => {}
+
+const createCategory = name => {
   return db.execute('INSERT INTO category (`name`) VALUES (?)', [name])
 }
 
-const createSubcategory = (name) => {
-  return db.execute('INSERT INTO subcategory (`name`) VALUES (?)', [name])
+const createSubcategory = (name, categoryId) => {
+  return db.execute('INSERT INTO subcategory (`name`, categoryId) VALUES (?, ?)', [
+    name,
+    categoryId
+  ])
 }
 
 const createIngredient = (name, categoryId, subcategoryId = null) => {
@@ -29,7 +36,7 @@ const createIngredient = (name, categoryId, subcategoryId = null) => {
   )
 }
 
-const deleteIngredient = (id) => {
+const deleteIngredient = id => {
   return db.execute('DELETE FROM `ingredient` WHERE id = ?', [id])
 }
 

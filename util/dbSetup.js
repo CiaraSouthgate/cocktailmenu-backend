@@ -53,6 +53,7 @@ const createCocktailIngredientTable = () => {
         subcategoryId   int,
         quantity        int            NOT NULL,
         unit            varchar(50)    NOT NULL,
+      PRIMARY KEY (cocktailId, ingredientId),
       FOREIGN KEY (ingredientId) REFERENCES ingredient(id),
       FOREIGN KEY (cocktailId) REFERENCES cocktail(id) ON DELETE CASCADE,
       FOREIGN KEY (categoryId) REFERENCES category(id),
@@ -66,14 +67,16 @@ const createCocktailIngredientTable = () => {
 }
 
 module.exports = {
-  createTables: () => {
+  init: () => {
+    console.log('Initializing database...')
     createIngredientCategoryTable()
       .then(createIngredientSubcategoryTable())
       .then(createIngredientTable())
       .then(createCocktailTable())
       .then(createCocktailIngredientTable())
-      .catch((err) => {
-        console.log(`Failed to create tables: ${err}`)
+      .catch(err => {
+        console.error(`Failed to create tables: ${err}`)
       })
+    console.log('Initialization complete.')
   }
 }

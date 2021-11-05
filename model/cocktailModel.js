@@ -59,8 +59,18 @@ const getCocktailsForIngredients = (ingredientIds, categoryIds, subcategoryIds) 
         LEFT JOIN cocktail co on ci.cocktailId = co.id
         LEFT JOIN category ca on ci.categoryId = ca.id
         LEFT JOIN subcategory s on ca.id = s.categoryId
-      WHERE i.id IN ? AND ca.id`,
-    [id]
+      WHERE co.id NOT IN (SELECT * FROM cocktail_ingredient ci2 WHERE ci2.ingredientId NOT IN ?)
+        AND co.id NOT IN (
+          SELECT * FROM cocktail_ingredient ci3
+            LEFT JOIN ingredient i2 ON ci3.ingredientId = i2.id
+            WHERE categoryId NOT IN ?
+        )
+        AND co.id NOT IN (
+          SELECT * FROM cocktail_ingredient ci4
+            LEFT JOIN ingredient i3 on ci4.ingredientId = i3.id
+            WHERE subcategory NOT IN ?
+          )`,
+    [ingredientIds, categoryIds, subcategoryIds]
   )
 }
 

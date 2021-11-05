@@ -14,12 +14,31 @@ const getCocktails = (req, res) => {
   })
 }
 
-const getCocktailsForIngredient = (ingredientIds) => {
-  cocktailModel.getCocktailsForIngredients(ingredientId).then(([data, _]) => {
+const getCocktailsForIngredients = (req, res) => {
+  const { ingredientIds, categoryIds, subcategoryIds } = req.body
+  cocktailModel
+    .getCocktailsForIngredients(ingredientIds, categoryIds, subcategoryIds)
+    .then(([data, _]) => {
+      if (data !== null) {
+        res.status(200).json({ cocktails: data })
+      } else {
+        res.status(404).json({ message: 'Ingredient not found' })
+      }
+    })
+}
+
+const createCocktail = (req, res) => {
+  const { name, ingredientIds, directions } = res.body
+  cocktailModel.createCocktail(name, directions).then(([data, _]) => {
     if (data !== null) {
-      res.status(200).json({ cocktails: data })
-    } else {
-      res.status(404).json({ message: 'Ingredient not found' })
+      const cocktailId = data.insertId
+      cocktailModel.addCocktailIngredients(cocktailId, ingredientIds).then(([data, _]) => {
+        if (data !== null) {
+          res.status(201).json({ id: cocktailId })
+          return
+        }
+      })
     }
+    res.status(500).json()
   })
 }

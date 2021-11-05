@@ -6,6 +6,6 @@ const dbSetup = require('./util/dbSetup')
 
 const PORT = process.env.PORT || 3000
 
-dbSetup.createTables()
+dbSetup.init()
 
 const app = express()

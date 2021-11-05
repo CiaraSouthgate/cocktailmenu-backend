@@ -1,33 +1,42 @@
 const model = require('../model/ingredientModel')
 
 const getIngredients = (_, res) => {
-  model.getAllIngredients().then(([data, _]) => {
-    if (data !== null) {
-      res.status(200).json({ ingredients: data })
-    } else {
-      res.status(404).json({ message: 'Ingredients not found' })
-    }
-  })
+  model
+    .getAllIngredients()
+    .then(([data, _]) => {
+      if (data !== null) {
+        res.status(200).json({ ingredients: data })
+      } else {
+        res.status(404).json({ message: 'Ingredients not found' })
+      }
+    })
+    .catch(err => res.status(500).json({ message: err }))
 }
 
 const getCategories = (_, res) => {
-  model.getAllCategories().then(([data, _]) => {
-    if (data !== null) {
-      res.status(200).json({ ingredients: data })
-    } else {
-      res.status(404).json({ message: 'Categories not found' })
-    }
-  })
+  model
+    .getAllCategories()
+    .then(([data, _]) => {
+      if (data !== null) {
+        res.status(200).json({ ingredients: data })
+      } else {
+        res.status(404).json({ message: 'Categories not found' })
+      }
+    })
+    .catch(err => res.status(500).json({ message: err }))
 }
 
 const getSubcategories = (_, res) => {
-  model.getAllSubcategories().then(([data, _]) => {
-    if (data !== null) {
-      res.status(200).json({ ingredients: data })
-    } else {
-      res.status(404).json({ message: 'Subcategories not found' })
-    }
-  })
+  model
+    .getAllSubcategories()
+    .then(([data, _]) => {
+      if (data !== null) {
+        res.status(200).json({ ingredients: data })
+      } else {
+        res.status(404).json({ message: 'Subcategories not found' })
+      }
+    })
+    .catch(err => res.status(500).json({ message: err }))
 }
 
 const createIngredient = (req, res) => {
@@ -46,7 +55,7 @@ const createIngredient = (req, res) => {
         res.status(500).json({ message: meta.message })
       }
     })
-    .catch((err) => {
+    .catch(err => {
       res.status(500).json({ message: err })
     })
 }
@@ -82,7 +91,7 @@ const updateIngredient = (req, res) => {
         res.status(500).json({ message: meta.message })
       }
     })
-    .catch((err) => {
+    .catch(err => {
       res.status(500).json({ message: err })
     })
 }
