@@ -5,7 +5,7 @@ const getCocktails = (req, res) => {
   const getCocktails = availableOnly
     ? cocktailModel.getAllCocktails
     : cocktailModel.getAllAvailableCocktails
-  getCocktails().then(([data, _]) => {
+  getCocktails().then(([data]) => {
     if (data !== null) {
       res.status(200).json({ cocktails: data })
     } else {
@@ -18,7 +18,7 @@ const getCocktailsForIngredients = (req, res) => {
   const { ingredientIds, categoryIds, subcategoryIds } = req.body
   cocktailModel
     .getCocktailsForIngredients(ingredientIds, categoryIds, subcategoryIds)
-    .then(([data, _]) => {
+    .then(([data]) => {
       if (data !== null) {
         res.status(200).json({ cocktails: data })
       } else {
@@ -29,10 +29,10 @@ const getCocktailsForIngredients = (req, res) => {
 
 const createCocktail = (req, res) => {
   const { name, ingredientIds, directions } = res.body
-  cocktailModel.createCocktail(name, directions).then(([data, _]) => {
+  cocktailModel.createCocktail(name, directions).then(([data]) => {
     if (data !== null) {
       const cocktailId = data.insertId
-      cocktailModel.addCocktailIngredients(cocktailId, ingredientIds).then(([data, _]) => {
+      cocktailModel.addCocktailIngredients(cocktailId, ingredientIds).then(([data]) => {
         if (data !== null) {
           res.status(201).json({ id: cocktailId })
           return
@@ -41,4 +41,8 @@ const createCocktail = (req, res) => {
     }
     res.status(500).json()
   })
+}
+
+module.exports = {
+  getCocktails
 }
